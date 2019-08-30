@@ -13,6 +13,7 @@ import co.edu.sena.gestion_libros.utils.JsonTransformer;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import java.util.Hashtable;
+import java.util.List;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import spark.Request;
@@ -92,25 +93,102 @@ public class ApiAutor extends BasicApi implements IApi {
         }
         return r;
     }
-
+/**
+ * Metodo para acutulizar los registros de una tupla.
+ * @param rq
+ * @param rs
+ * @return Hashtable
+ */
     @Override
     public Object update(Request rq, Response rs) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Hashtable<String, Object> r = new Hashtable<>();
+        try {
+            int id = Integer.parseInt(rq.params("id"));
+            Autor entity = controller.findAutor(id);
+            controller.edit(entity);//No estoy seguro
+            rs.status(201);
+            r.put("status", 201);
+            r.put("message", "Modificado con exito!");
+            r.put("data", entity);
+        } catch (Exception e) {
+            rs.status(400);
+            r.put("status", 400);
+            r.put("message", e.getMessage());
+        }
+        return r;
     }
-
+/**
+ * Metodo para eliminar una tupla de la tabla
+ * @param rq
+ * @param rs
+ * @return Hashtable
+ */
     @Override
     public Object delete(Request rq, Response rs) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Hashtable<String, Object> r = new Hashtable<>();
+        try {
+            int id = Integer.parseInt(rq.params("id"));
+            Autor entity = controller.findAutor(id);
+            controller.destroy(id);//No estoy seguro
+            rs.status(201);
+            r.put("status", 201);
+            r.put("message", "Eliminado con exito!");
+            r.put("data", entity);
+        } catch (Exception e) {
+            rs.status(400);
+            r.put("status", 400);
+            r.put("message", e.getMessage());
+        }
+        return r;
     }
-
+/**
+ * Metodo para conulta generar de los registros de una tabla.
+ * @param rq
+ * @param rs
+ * @return Hashtable
+ */
     @Override
     public Object getAll(Request rq, Response rs) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Hashtable<String, Object> r = new Hashtable<>();
+        List<Autor> categorias = controller.findAutorEntities();
+        if (categorias.size() > 0) {
+            r.put("status", 200);
+            r.put("message", "Registros encontrados");
+            r.put("data", categorias);
+        } else {
+            rs.status(404);
+            r.put("status", 404);
+            r.put("message", "Registros no encontrados");
+        }
+        return r;
     }
-
+/**
+ * Metodo para consultar una tupla especifico de la tabla 
+ * @param rq
+ * @param rs
+ * @return 
+ */
     @Override
     public Object getById(Request rq, Response rs) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Hashtable<String, Object> r = new Hashtable<>();
+        try {
+            int id = Integer.parseInt(rq.params("id"));
+            Autor entity = controller.findAutor(id);
+            if (entity != null) {
+                r.put("status", 200);
+                r.put("message", "Registro encontrado!");
+                r.put("data", entity);
+            } else {
+                rs.status(404);
+                r.put("status", 404);
+                r.put("message", "Registro con id@" + id + " encontrado!");
+            }
+        } catch (Exception e) {
+            rs.status(400);
+            r.put("status", 400);
+            r.put("message", e.getMessage());
+        }
+        return r;
     }
 
 }

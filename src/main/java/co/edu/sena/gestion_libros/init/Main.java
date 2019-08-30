@@ -1,5 +1,6 @@
 package co.edu.sena.gestion_libros.init;
 
+import co.edu.sena.gestion_libros.apis.ApiAutor;
 import co.edu.sena.gestion_libros.apis.abstract_.ApiCategoria;
 import spark.*;
 
@@ -13,6 +14,7 @@ public class Main {
         Spark.port(99);       
         //Registro de apis
         ApiCategoria.singleton();
+        ApiAutor.singleton();
     }
     
 }
