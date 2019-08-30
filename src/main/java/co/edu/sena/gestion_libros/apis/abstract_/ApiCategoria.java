@@ -33,11 +33,23 @@ public class ApiCategoria extends BasicApi implements IApi {
         return instance;
     }
 
+    /**
+     * Metodo para obtener la ubicacion
+     *
+     * @return tipo String
+     */
     @Override
     public String getPath() {
         return path;
     }
 
+    /**
+     * Metodo para crear un registro en la tabla
+     *
+     * @param rq
+     * @param rs
+     * @return Hashtable
+     */
     @Override
     public Object create(Request rq, Response rs) {
         Hashtable<String, Object> r = new Hashtable<>();
@@ -63,16 +75,65 @@ public class ApiCategoria extends BasicApi implements IApi {
         return r;
     }
 
+    /**
+     * Metodo para actualizar un registro por el ID de la tupla
+     *
+     * @param rq
+     * @param rs
+     * @return Hashtable
+     */
     @Override
     public Object update(Request rq, Response rs) {
-        return "update";
+        Hashtable<String, Object> r = new Hashtable<>();
+        try {
+            int id = Integer.parseInt(rq.params("id"));
+            Categoria entity = controller.findCategoria(id);
+            controller.edit(entity);//No estoy seguro
+            rs.status(201);
+            r.put("status", 201);
+            r.put("message", "Modificado con exito!");
+            r.put("data", entity);
+        } catch (Exception e) {
+            rs.status(400);
+            r.put("status", 400);
+            r.put("message", e.getMessage());
+        }
+        return r;
     }
 
+    /**
+     * Metodo para eliminar un registro de la base de datos
+     *
+     * @param rq
+     * @param rs
+     * @return Hashtable
+     */
     @Override
     public Object delete(Request rq, Response rs) {
-        return "delete";
+        Hashtable<String, Object> r = new Hashtable<>();
+        try {
+            int id = Integer.parseInt(rq.params("id"));
+            Categoria entity = controller.findCategoria(id);
+            controller.destroy(id);//No estoy seguro
+            rs.status(201);
+            r.put("status", 201);
+            r.put("message", "Eliminado con exito!");
+            r.put("data", entity);
+        } catch (Exception e) {
+            rs.status(400);
+            r.put("status", 400);
+            r.put("message", e.getMessage());
+        }
+        return r;
     }
 
+    /**
+     * Metodo para una consulta general de toda la tabla.
+     *
+     * @param rq
+     * @param rs
+     * @return
+     */
     @Override
     public Object getAll(Request rq, Response rs) {
         Hashtable<String, Object> r = new Hashtable<>();
@@ -89,6 +150,13 @@ public class ApiCategoria extends BasicApi implements IApi {
         return r;
     }
 
+    /**
+     * Metodo para la consulta por ID de un registro de la tabla.
+     *
+     * @param rq
+     * @param rs
+     * @return Hashtable
+     */
     @Override
     public Object getById(Request rq, Response rs) {
         Hashtable<String, Object> r = new Hashtable<>();
