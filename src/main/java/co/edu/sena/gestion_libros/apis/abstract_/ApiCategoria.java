@@ -70,7 +70,19 @@ public class ApiCategoria extends BasicApi implements IApi {
 
     @Override
     public Object delete(Request rq, Response rs) {
-        return "delete";
+        Hashtable<String, Object> r = new Hashtable<>();
+        try{
+            int id = Integer.parseInt(rq.params("id"));
+            controller.destroy(id);
+            r.put("status", 200);
+            r.put("message", "Eliminado con exito!");
+        }catch(Exception e){
+            rs.status(400);
+            rs.put("status", 400);
+            rs.put("message", e.getMessage());
+        }
+        
+        return r;
     }
 
     @Override
