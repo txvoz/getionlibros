@@ -80,8 +80,7 @@ public class ApiCategoria extends BasicApi implements IApi {
             rs.status(400);
             r.put("status", 400);
             r.put("message", e.getMessage());
-        }
-        
+        }        
         return r;
     }
 
