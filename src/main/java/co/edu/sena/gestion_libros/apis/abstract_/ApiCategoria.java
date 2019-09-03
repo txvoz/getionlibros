@@ -78,8 +78,8 @@ public class ApiCategoria extends BasicApi implements IApi {
             r.put("message", "Eliminado con exito!");
         }catch(Exception e){
             rs.status(400);
-            rs.put("status", 400);
-            rs.put("message", e.getMessage());
+            r.put("status", 400);
+            r.put("message", e.getMessage());
         }
         
         return r;
