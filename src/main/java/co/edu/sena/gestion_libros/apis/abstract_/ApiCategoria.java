@@ -65,6 +65,12 @@ public class ApiCategoria extends BasicApi implements IApi {
 
     @Override
     public Object update(Request rq, Response rs) {
+        Hashtable<String, Object> r = new Hashtable<>();
+        try {
+            
+        } catch (Exception e) {
+        }
+        
         return "update";
     }
 
