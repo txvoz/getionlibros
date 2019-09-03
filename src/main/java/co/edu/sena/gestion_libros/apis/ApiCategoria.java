@@ -1,14 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package co.edu.sena.gestion_libros.apis;
 
 import co.edu.sena.gestion_libros.apis.abstract_.BasicApi;
 import co.edu.sena.gestion_libros.apis.abstract_.IApi;
-import co.edu.sena.gestion_libros.controllers.LibroJpaController;
-import co.edu.sena.gestion_libros.entities.Libro;
+import co.edu.sena.gestion_libros.controllers.CategoriaJpaController;
+import co.edu.sena.gestion_libros.entities.Categoria;
 import co.edu.sena.gestion_libros.utils.JsonTransformer;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -19,54 +14,51 @@ import javax.persistence.Persistence;
 import spark.Request;
 import spark.Response;
 
-/**
- *
- * @author Andrés Felipe Mera Tróchez
- */
-public class ApiLibro extends BasicApi implements IApi {
+public class ApiCategoria extends BasicApi implements IApi {
 
-    private static ApiLibro instance = null;
+    private static ApiCategoria instance = null;
     private Gson gson = null;
-    private String path = "/libro";
-    LibroJpaController controller;
-    /**
-     * Constructor Private de la clase
-     */
-    private ApiLibro() {
+    private String path = "/categoria";
+    private CategoriaJpaController controller;
+
+    private ApiCategoria() {
         init();
         gson = JsonTransformer.singleton().getGson();
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPU_LIBROS");
-        controller = new LibroJpaController(emf);
+        controller = new CategoriaJpaController(emf);
     }
-    /**
-     * Metodo para generar instancia para comenzar el simpleton
-     *
-     * @return tipo ApiLIbro
-     */
-    public static ApiLibro singleton() {
+
+    public static ApiCategoria singleton() {
         if (instance == null) {
-            instance = new ApiLibro();
+            instance = new ApiCategoria();
         }
         return instance;
     }
 
     /**
-     * Metodo para retornar la ubucacion
+     * Metodo para obtener la ubicacion
      *
-     * @return de tipo String
+     * @return tipo String
      */
     @Override
     public String getPath() {
         return path;
     }
 
+    /**
+     * Metodo para crear un registro en la tabla
+     *
+     * @param rq
+     * @param rs
+     * @return Hashtable
+     */
     @Override
     public Object create(Request rq, Response rs) {
         Hashtable<String, Object> r = new Hashtable<>();
         String body = rq.body();
         if (!body.trim().equals("")) {
             try {
-                Libro entity = gson.fromJson(body, Libro.class);
+                Categoria entity = gson.fromJson(body, Categoria.class);
                 controller.create(entity);
                 rs.status(201);
                 r.put("status", 201);
@@ -85,12 +77,19 @@ public class ApiLibro extends BasicApi implements IApi {
         return r;
     }
 
+    /**
+     * Metodo para actualizar un registro por el ID de la tupla
+     *
+     * @param rq
+     * @param rs
+     * @return Hashtable
+     */
     @Override
     public Object update(Request rq, Response rs) {
         Hashtable<String, Object> r = new Hashtable<>();
         try {
             int id = Integer.parseInt(rq.params("id"));
-            Libro entity = controller.findLibro(id);
+            Categoria entity = controller.findCategoria(id);
             controller.edit(entity);//No estoy seguro
             rs.status(201);
             r.put("status", 201);
@@ -104,12 +103,19 @@ public class ApiLibro extends BasicApi implements IApi {
         return r;
     }
 
+    /**
+     * Metodo para eliminar un registro de la base de datos
+     *
+     * @param rq
+     * @param rs
+     * @return Hashtable
+     */
     @Override
     public Object delete(Request rq, Response rs) {
         Hashtable<String, Object> r = new Hashtable<>();
         try {
             int id = Integer.parseInt(rq.params("id"));
-            Libro entity = controller.findLibro(id);
+            Categoria entity = controller.findCategoria(id);
             controller.destroy(id);//No estoy seguro
             rs.status(201);
             r.put("status", 201);
@@ -123,14 +129,21 @@ public class ApiLibro extends BasicApi implements IApi {
         return r;
     }
 
+    /**
+     * Metodo para una consulta general de toda la tabla.
+     *
+     * @param rq
+     * @param rs
+     * @return
+     */
     @Override
     public Object getAll(Request rq, Response rs) {
         Hashtable<String, Object> r = new Hashtable<>();
-        List<Libro> libros = controller.findLibroEntities();
-        if (libros.size() > 0) {
+        List<Categoria> categorias = controller.findCategoriaEntities();
+        if (categorias.size() > 0) {
             r.put("status", 200);
             r.put("message", "Registros encontrados");
-            r.put("data", libros);
+            r.put("data", categorias);
         } else {
             rs.status(404);
             r.put("status", 404);
@@ -139,12 +152,19 @@ public class ApiLibro extends BasicApi implements IApi {
         return r;
     }
 
+    /**
+     * Metodo para la consulta por ID de un registro de la tabla.
+     *
+     * @param rq
+     * @param rs
+     * @return Hashtable
+     */
     @Override
     public Object getById(Request rq, Response rs) {
         Hashtable<String, Object> r = new Hashtable<>();
         try {
             int id = Integer.parseInt(rq.params("id"));
-            Libro entity = controller.findLibro(id);
+            Categoria entity = controller.findCategoria(id);
             if (entity != null) {
                 r.put("status", 200);
                 r.put("message", "Registro encontrado!");
@@ -161,4 +181,5 @@ public class ApiLibro extends BasicApi implements IApi {
         }
         return r;
     }
+
 }
