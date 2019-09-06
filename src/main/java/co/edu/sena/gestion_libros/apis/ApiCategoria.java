@@ -89,12 +89,21 @@ public class ApiCategoria extends BasicApi implements IApi {
         Hashtable<String, Object> r = new Hashtable<>();
         try {
             int id = Integer.parseInt(rq.params("id"));
-            Categoria entity = controller.findCategoria(id);
-            controller.edit(entity);//No estoy seguro
-            rs.status(201);
-            r.put("status", 201);
-            r.put("message", "Modificado con exito!");
-            r.put("data", entity);
+            String body = rq.body();
+            Categoria newEntity = gson.fromJson(body, Categoria.class);
+            Categoria oldEntity = controller.findCategoria(id);
+            if (oldEntity != null) {
+                oldEntity.setCatNombre(newEntity.getCatNombre());
+                controller.edit(oldEntity);
+                rs.status(200);
+                r.put("status", 200);
+                r.put("message", "Modificado con exito!");
+                r.put("data", oldEntity);
+            } else {
+                rs.status(404);
+                r.put("status", 404);
+                r.put("message", "Modificado con el id " + id + " no encontrado!");
+            }
         } catch (Exception e) {
             rs.status(400);
             r.put("status", 400);
@@ -115,6 +124,7 @@ public class ApiCategoria extends BasicApi implements IApi {
         Hashtable<String, Object> r = new Hashtable<>();
         try {
             int id = Integer.parseInt(rq.params("id"));
+            System.out.println("ID "+id);
             Categoria entity = controller.findCategoria(id);
             controller.destroy(id);//No estoy seguro
             rs.status(201);

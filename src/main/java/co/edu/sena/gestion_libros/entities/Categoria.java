@@ -5,6 +5,7 @@
  */
 package co.edu.sena.gestion_libros.entities;
 
+import com.google.gson.annotations.Expose;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
@@ -41,9 +42,11 @@ public class Categoria implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "catId", nullable = false)
+    @Expose
     private Integer catId;
     @Basic(optional = false)
     @Column(name = "catNombre", nullable = false, length = 20)
+    @Expose
     private String catNombre;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "catId")
     private List<Libro> libroList;
