@@ -1,13 +1,12 @@
 $(function(){
     $("#frmCrear").submit(function(){
-        var libro = new Object();
-        libro.nombre = $("#nombre").val();
-        libro.cantidadPaginas = $("#cantidadPaginas").val();
+        var entidad = new Object();
+        entidad.catNombre = $("#catNombre").val();
         
-        var jlibro = JSON.stringify(libro);
+        var jentidad = JSON.stringify(entidad);
         
-        httpConnect("/categoria",jlibro,"POST",function(r){
-            alert(r.message+"-"+r.data.nombre);
+        httpConnect("/categoria",jentidad,"POST",function(r){
+            alert(r.message+"-"+r.data.catNombre);
             $("button[type=reset]").click();
         });
         

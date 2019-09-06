@@ -67,9 +67,14 @@ public class ApiCategoria extends BasicApi implements IApi {
 
     @Override
     public Object update(Request rq, Response rs) {
+<<<<<<< HEAD
         Hashtable<String, Object> r = new Hashtable<>();
         try {
 
+=======
+        Hashtable<String, Object> retorno = new Hashtable<>();
+        try {
+>>>>>>> master
             int id = Integer.parseInt(rq.params("id"));
             String body = rq.body();
             Categoria newEntity = gson.fromJson(body, Categoria.class);
@@ -77,6 +82,7 @@ public class ApiCategoria extends BasicApi implements IApi {
             if (oldEntity != null) {
                 oldEntity.setCatNombre(newEntity.getCatNombre());
                 controller.edit(oldEntity);
+<<<<<<< HEAD
                 r.put("status", 200);
                 r.put("message", "Registro actualizado con exito");
                 r.put("data", oldEntity);
@@ -92,6 +98,22 @@ public class ApiCategoria extends BasicApi implements IApi {
         }
 
         return r;
+=======
+                retorno.put("status", 200);
+                retorno.put("message", "Registro actualizado con exito!");
+                retorno.put("data",oldEntity);
+            } else {
+                rs.status(404);
+                retorno.put("status", 404);
+                retorno.put("message", "Registros con id@"+id+" no encontrado!");
+            }
+        } catch (Exception e) {
+            rs.status(400);
+            retorno.put("status", 400);
+            retorno.put("message", e.getMessage());
+        }
+        return retorno;
+>>>>>>> master
     }
 
     
@@ -140,7 +162,11 @@ public class ApiCategoria extends BasicApi implements IApi {
             } else {
                 rs.status(404);
                 r.put("status", 404);
+<<<<<<< HEAD
                 r.put("message", "Registro con id@" + id + " No encontrado!");
+=======
+                r.put("message", "Registro con id@" + id + " no encontrado!");
+>>>>>>> master
             }
         } catch (Exception e) {
             rs.status(400);

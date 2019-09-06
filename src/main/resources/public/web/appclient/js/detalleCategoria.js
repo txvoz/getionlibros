@@ -5,8 +5,8 @@ function cargarDetalle() {
             alert(r.message);
             window.location.replace("?p=listarCategoria");
         }
-        $("#nombre").val(r.data.nombre);
-        $("#id").val(id);
+        $("#catNombre").val(r.data.catNombre);
+        $("#catId").val(id);
     },function(e){
         alert(e);
         window.location.replace("?p=listarCategoria");
@@ -17,12 +17,12 @@ $(function () {
     cargarDetalle();
     $("#frmUpdate").submit(function(){
         var entidad = new Object();
-        entidad.nombre = $("#nombre").val();
+        entidad.catNombre = $("#catNombre").val();
         var jentidad = JSON.stringify(entidad);
         
-        var id=$("#id").val();
+        var id=$("#catId").val();
         httpConnect("/categoria/"+id,jentidad,"PUT",function(r){
-            alert(r.message+"-"+r.data.nombre);
+            alert(r.message+"-"+r.data.catNombre);
             window.location.replace("?p=listarCategoria");
         });
         return false;
