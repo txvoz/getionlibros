@@ -29,6 +29,7 @@ public class ApiLibro extends BasicApi implements IApi {
     private Gson gson = null;
     private String path = "/libro";
     LibroJpaController controller;
+
     /**
      * Constructor Private de la clase
      */
@@ -38,6 +39,7 @@ public class ApiLibro extends BasicApi implements IApi {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPU_LIBROS");
         controller = new LibroJpaController(emf);
     }
+
     /**
      * Metodo para generar instancia para comenzar el simpleton
      *
@@ -90,12 +92,24 @@ public class ApiLibro extends BasicApi implements IApi {
         Hashtable<String, Object> r = new Hashtable<>();
         try {
             int id = Integer.parseInt(rq.params("id"));
-            Libro entity = controller.findLibro(id);
-            controller.edit(entity);//No estoy seguro
-            rs.status(201);
-            r.put("status", 201);
-            r.put("message", "Modificado con exito!");
-            r.put("data", entity);
+            String body = rq.body();
+            Libro newEntity = gson.fromJson(body, Libro.class);
+            Libro oldEntity = controller.findLibro(id);
+            if (oldEntity != null) {
+                oldEntity.setLibNombre(newEntity.getLibNombre());
+                oldEntity.setLibNumeroPaginas(newEntity.getLibNumeroPaginas());
+                oldEntity.setLibFechaPublicacion(newEntity.getLibFechaPublicacion());
+                oldEntity.setCatId(newEntity.getCatId());
+                controller.edit(oldEntity);
+                rs.status(201);
+                r.put("status", 201);
+                r.put("message", "Modificado con exito!");
+                r.put("data", oldEntity);
+            } else {
+                rs.status(404);
+                r.put("status", 404);
+                r.put("message", "Modificado con el id " + id + " no encontrado!");
+            }
         } catch (Exception e) {
             rs.status(400);
             r.put("status", 400);
