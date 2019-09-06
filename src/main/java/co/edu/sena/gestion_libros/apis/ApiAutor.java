@@ -93,23 +93,36 @@ public class ApiAutor extends BasicApi implements IApi {
         }
         return r;
     }
-/**
- * Metodo para acutulizar los registros de una tupla.
- * @param rq
- * @param rs
- * @return Hashtable
- */
+
+    /**
+     * Metodo para acutulizar los registros de una tupla.
+     *
+     * @param rq
+     * @param rs
+     * @return Hashtable
+     */
     @Override
     public Object update(Request rq, Response rs) {
         Hashtable<String, Object> r = new Hashtable<>();
         try {
             int id = Integer.parseInt(rq.params("id"));
-            Autor entity = controller.findAutor(id);
-            controller.edit(entity);//No estoy seguro
-            rs.status(201);
-            r.put("status", 201);
-            r.put("message", "Modificado con exito!");
-            r.put("data", entity);
+            String body = rq.body();
+            Autor newEntity = gson.fromJson(body, Autor.class);
+            Autor oldEntity = controller.findAutor(id);
+            if (oldEntity != null) {
+                oldEntity.setAutNombre(newEntity.getAutNombre());
+                oldEntity.setAutGenero(newEntity.getAutGenero());
+                oldEntity.setAutFechaNacimiento(newEntity.getAutFechaNacimiento());
+                controller.edit(oldEntity);
+                rs.status(201);
+                r.put("status", 200);
+                r.put("message", "Modificado con exito!");
+                r.put("data", oldEntity);
+            } else {
+                rs.status(404);
+                r.put("status", 404);
+                r.put("message", "Modificado con el id " + id + " no encontrado!");
+            }
         } catch (Exception e) {
             rs.status(400);
             r.put("status", 400);
@@ -117,12 +130,14 @@ public class ApiAutor extends BasicApi implements IApi {
         }
         return r;
     }
-/**
- * Metodo para eliminar una tupla de la tabla
- * @param rq
- * @param rs
- * @return Hashtable
- */
+
+    /**
+     * Metodo para eliminar una tupla de la tabla
+     *
+     * @param rq
+     * @param rs
+     * @return Hashtable
+     */
     @Override
     public Object delete(Request rq, Response rs) {
         Hashtable<String, Object> r = new Hashtable<>();
@@ -141,12 +156,14 @@ public class ApiAutor extends BasicApi implements IApi {
         }
         return r;
     }
-/**
- * Metodo para conulta generar de los registros de una tabla.
- * @param rq
- * @param rs
- * @return Hashtable
- */
+
+    /**
+     * Metodo para conulta generar de los registros de una tabla.
+     *
+     * @param rq
+     * @param rs
+     * @return Hashtable
+     */
     @Override
     public Object getAll(Request rq, Response rs) {
         Hashtable<String, Object> r = new Hashtable<>();
@@ -162,12 +179,14 @@ public class ApiAutor extends BasicApi implements IApi {
         }
         return r;
     }
-/**
- * Metodo para consultar una tupla especifico de la tabla 
- * @param rq
- * @param rs
- * @return 
- */
+
+    /**
+     * Metodo para consultar una tupla especifico de la tabla
+     *
+     * @param rq
+     * @param rs
+     * @return
+     */
     @Override
     public Object getById(Request rq, Response rs) {
         Hashtable<String, Object> r = new Hashtable<>();

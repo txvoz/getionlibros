@@ -20,9 +20,10 @@ function cargarDatos() {
             html += "<tr>";
             html += "<td>" + libro.libNombre + "</td>";
             html += "<td>" + libro.libNumeroPaginas + "</td>";
-//            html += "<td>" + libro.entityCategoria.nombre + "</td>";
+            html += "<td>" + libro.libFechaPublicacion + "</td>";
             html += "<td>" + libro.catId.catNombre + "</td>";
             html += "<td>";
+//            html += "<div data-id='" + libro.libId + "' class='material-icons book' style='color:blue'>book</div>";
             html += "<div data-id='" + libro.libId + "' class='material-icons delete' style='color:red'>delete</div>";
             html += "<div data-id='" + libro.libId + "' class='material-icons edit' style='color:green'>edit</div>";
             html += "</td>";
@@ -39,6 +40,9 @@ function cargarDatos() {
             detalle(this);
         });
 
+//        $(".book").click(function () {
+//            detalleAutorLibro(this);
+//        });
     });
 }
 

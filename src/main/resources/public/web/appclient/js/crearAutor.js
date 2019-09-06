@@ -1,16 +1,17 @@
-$(function(){
-    $("#frmCrear").submit(function(){
+$(function () {
+    $("#frmCrear").submit(function () {
         var entidad = new Object();
-        entidad.nombre = $("#nombre").val();
-        entidad.fechaNacimiento = $("#fechaNacimiento").val();
-        
+        entidad.autNombre = $("#nombre").val();
+        entidad.autFechaNacimiento = $("#fechaNacimiento").val();
+        entidad.autGenero = $("#generom").is(":checked") ? "M" : "F";
+
         var jentidad = JSON.stringify(entidad);
-        
-        httpConnect("/autor",jentidad,"POST",function(r){
-            alert(r.message+"-"+r.data.nombre);
+        alert(entidad.autNombre+" "+entidad.autFechaNacimiento+" "+entidad.autGenero);
+        httpConnect("/autor", jentidad, "POST", function (r) {
+            alert(r.message + "-" + r.data.autNombre);
             $("button[type=reset]").click();
         });
-        
+
         return false;
     });
 });

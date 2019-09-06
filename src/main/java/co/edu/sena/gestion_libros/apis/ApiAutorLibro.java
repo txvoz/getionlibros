@@ -29,21 +29,21 @@ public class ApiAutorLibro extends BasicApi implements IApi {
     private Gson gson = null;
     private String path = "/autorlibro";
     AutorLibroJpaController controller;
-    
-    private ApiAutorLibro(){
+
+    private ApiAutorLibro() {
         init();
         gson = JsonTransformer.singleton().getGson();
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPU_LIBROS");
         controller = new AutorLibroJpaController(emf);
     }
-    
+
     public static ApiAutorLibro singleton() {
         if (instance == null) {
             instance = new ApiAutorLibro();
         }
         return instance;
     }
-    
+
     @Override
     public String getPath() {
         return path;
@@ -74,17 +74,34 @@ public class ApiAutorLibro extends BasicApi implements IApi {
         return r;
     }
 
+    /**
+     * Metodo put para actualizar los datos del registro por id.
+     *
+     * @param rq
+     * @param rs
+     * @return
+     */
     @Override
     public Object update(Request rq, Response rs) {
         Hashtable<String, Object> r = new Hashtable<>();
         try {
             int id = Integer.parseInt(rq.params("id"));
-            AutorLibro entity = controller.findAutorLibro(id);
-            controller.edit(entity);//No estoy seguro
-            rs.status(201);
-            r.put("status", 201);
-            r.put("message", "Modificado con exito!");
-            r.put("data", entity);
+            String body = rq.body();
+            AutorLibro newEntity = gson.fromJson(body, AutorLibro.class);
+            AutorLibro oldEntity = controller.findAutorLibro(id);
+            if (oldEntity != null) {
+                oldEntity.setAutId(newEntity.getAutId());
+                oldEntity.setLibId(newEntity.getLibId());
+                controller.edit(oldEntity);
+                rs.status(200);
+                r.put("status", 200);
+                r.put("message", "Modificado con exito!");
+                r.put("data", oldEntity);
+            } else {
+                rs.status(404);
+                r.put("status", 404);
+                r.put("message", "Modificado con el id " + id + " no encontrado!");
+            }
         } catch (Exception e) {
             rs.status(400);
             r.put("status", 400);
@@ -150,5 +167,5 @@ public class ApiAutorLibro extends BasicApi implements IApi {
         }
         return r;
     }
-    
+
 }

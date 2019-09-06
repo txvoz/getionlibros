@@ -18,13 +18,14 @@ $(function () {
     cargarDetalle();
     $("#frmUpdate").submit(function(){
         var entidad = new Object();
-        entidad.nombre = $("#nombre").val();
-        entidad.cantidadPaginas = $("#fechaNacimiento").val();
+        entidad.autNombre = $("#nombre").val();
+        entidad.autGenero = $("#generom").is(":checked") ? "M" : "F";
+        entidad.autFechaNacimiento = $("#fechaNacimiento").val();
         var jentidad = JSON.stringify(entidad);
         
         var id=$("#id").val();
         httpConnect("/autor/"+id,jentidad,"PUT",function(r){
-            alert(r.message+"-"+r.data.nombre);
+            alert(r.message+"-"+r.data.autNombre);
             window.location.replace("?p=listarAutor");
         });
         return false;

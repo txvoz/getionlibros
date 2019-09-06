@@ -19,10 +19,11 @@ function cargarDatos() {
             var autor = r.data[i];
             html += "<tr>";
             html += "<td>" + autor.autNombre + "</td>";
+            html += "<td>" + autor.autGenero + "</td>";
             html += "<td>" + autor.autFechaNacimiento + "</td>";
             html += "<td>";
-            html += "<div data-id='" + autor.Id + "' class='material-icons delete' style='color:red'>delete</div>";
-            html += "<div data-id='" + autor.Id + "' class='material-icons edit' style='color:green'>edit</div>";
+            html += "<div data-id='" + autor.autId + "' class='material-icons delete' style='color:red'>delete</div>";
+            html += "<div data-id='" + autor.autId + "' class='material-icons edit' style='color:green'>edit</div>";
             html += "</td>";
             html += "</tr>";
         }
