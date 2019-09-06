@@ -16,12 +16,12 @@ function cargarDatos() {
     httpConnect("/categoria", null, "GET", function (r) {
         var html = "";
         for (var i = 0; i < r.data.length; i++) {
-            var libro = r.data[i];
+            var entidad = r.data[i];
             html += "<tr>";
-            html += "<td>" + libro.nombre + "</td>";
+            html += "<td>" + entidad.catNombre + "</td>";
             html += "<td>";
-            html += "<div data-id='" + i + "' class='material-icons delete' style='color:red'>delete</div>";
-            html += "<div data-id='" + i + "' class='material-icons edit' style='color:green'>edit</div>";
+            html += "<div data-id='" + entidad.catId + "' class='material-icons delete' style='color:red'>delete</div>";
+            html += "<div data-id='" + entidad.catId + "' class='material-icons edit' style='color:green'>edit</div>";
             html += "</td>";
             html += "</tr>";
         }

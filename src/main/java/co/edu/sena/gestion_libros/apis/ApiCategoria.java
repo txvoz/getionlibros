@@ -67,7 +67,29 @@ public class ApiCategoria extends BasicApi implements IApi {
 
     @Override
     public Object update(Request rq, Response rs) {
-        return "update";
+        Hashtable<String, Object> retorno = new Hashtable<>();
+        try {
+            int id = Integer.parseInt(rq.params("id"));
+            String body = rq.body();
+            Categoria newEntity = gson.fromJson(body, Categoria.class);
+            Categoria oldEntity = controller.findCategoria(id);
+            if (oldEntity != null) {
+                oldEntity.setCatNombre(newEntity.getCatNombre());
+                controller.edit(oldEntity);
+                retorno.put("status", 200);
+                retorno.put("message", "Registro actualizado con exito!");
+                retorno.put("data",oldEntity);
+            } else {
+                rs.status(404);
+                retorno.put("status", 404);
+                retorno.put("message", "Registros con id@"+id+" no encontrado!");
+            }
+        } catch (Exception e) {
+            rs.status(400);
+            retorno.put("status", 400);
+            retorno.put("message", e.getMessage());
+        }
+        return retorno;
     }
 
     @Override
@@ -115,7 +137,7 @@ public class ApiCategoria extends BasicApi implements IApi {
             } else {
                 rs.status(404);
                 r.put("status", 404);
-                r.put("message", "Registro con id@" + id + " encontrado!");
+                r.put("message", "Registro con id@" + id + " no encontrado!");
             }
         } catch (Exception e) {
             rs.status(400);

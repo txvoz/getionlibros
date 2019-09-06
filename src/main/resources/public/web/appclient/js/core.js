@@ -77,7 +77,8 @@ function httpConnect(route, data, method, success = null, error = null, beforeSe
             };
             //createMessage(r);
             if (error !== null) {
-                error(e.responseText);
+                var obj = JSON.parse(e.responseText);
+                error(obj);
             }
         }
     });
