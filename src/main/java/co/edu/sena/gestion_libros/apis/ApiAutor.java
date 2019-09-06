@@ -150,11 +150,11 @@ public class ApiAutor extends BasicApi implements IApi {
     @Override
     public Object getAll(Request rq, Response rs) {
         Hashtable<String, Object> r = new Hashtable<>();
-        List<Autor> categorias = controller.findAutorEntities();
-        if (categorias.size() > 0) {
+        List<Autor> libros = controller.findAutorEntities();
+        if (libros.size() > 0) {
             r.put("status", 200);
             r.put("message", "Registros encontrados");
-            r.put("data", categorias);
+            r.put("data", libros);
         } else {
             rs.status(404);
             r.put("status", 404);
@@ -190,5 +190,4 @@ public class ApiAutor extends BasicApi implements IApi {
         }
         return r;
     }
-
 }

@@ -1,6 +1,7 @@
 package co.edu.sena.gestion_libros.utils;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import spark.ResponseTransformer;
 
 public class JsonTransformer implements ResponseTransformer{
@@ -10,7 +11,8 @@ public class JsonTransformer implements ResponseTransformer{
     
     //Segundo tener constructor privado
     private JsonTransformer(){
-        gson = new Gson();
+        //gson = new Gson();
+        gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
     }
     
     //Tercero tener un metodo estatico publico
