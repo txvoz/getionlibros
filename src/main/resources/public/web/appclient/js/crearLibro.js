@@ -13,13 +13,13 @@ function cargarCategorias() {
 function cargarAutores() {
     httpConnect("/autor", null, "GET", function (r) {
         var html = "<select name='states' id='example' class='form-control'  multiple='multiple' style='display: none;'>";
-        html += "<option selected value='AL'>Alabama</option>";
         for (var i = 0; i < r.data.length; i++) {
             var valor = r.data[i];
             html += "<option value='" + valor.autId + "'>" + valor.autNombre + "</option>";
         }
         html += "</select>";
         $("#contentAutores").html(html);
+        $('#example').dashboardCodeBsMultiSelect();
     });
 }
 $(function () {
@@ -27,8 +27,6 @@ $(function () {
 
     cargarAutores();
     
-    $('#example').dashboardCodeBsMultiSelect();
-
     $("#frmCrear").submit(function () {
         var libro = new Object();
         libro.libNombre = $("#nombre").val();
