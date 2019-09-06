@@ -9,6 +9,8 @@ function eliminar(target) {
             function (r) {
                 alert(r.message);
                 cargarDatos();
+            },function(r){
+                alert(r.message);
             });
 }
 
