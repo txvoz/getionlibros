@@ -5,6 +5,7 @@
  */
 package co.edu.sena.gestion_libros.entities;
 
+import com.google.gson.annotations.Expose;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -44,16 +45,20 @@ public class Autor implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "autId", nullable = false)
+    @Expose
     private Integer autId;
     @Basic(optional = false)
     @Column(name = "autNombre", nullable = false, length = 30)
+    @Expose
     private String autNombre;
     @Basic(optional = false)
     @Column(name = "autGenero", nullable = false, length = 2)
+    @Expose
     private String autGenero;
     @Basic(optional = false)
     @Column(name = "autFechaNacimiento", nullable = false)
     @Temporal(TemporalType.DATE)
+    @Expose
     private Date autFechaNacimiento;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "autId")
     private List<AutorLibro> autorLibroList;

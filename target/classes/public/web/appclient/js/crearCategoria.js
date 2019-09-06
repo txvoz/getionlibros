@@ -8,6 +8,8 @@ $(function(){
         httpConnect("/categoria",jentidad,"POST",function(r){
             alert(r.message+"-"+r.data.catNombre);
             $("button[type=reset]").click();
+        },function(r){
+            alert(r.message);
         });
         
         return false;

@@ -2,8 +2,8 @@ package co.edu.sena.gestion_libros.apis;
 
 import co.edu.sena.gestion_libros.apis.abstract_.BasicApi;
 import co.edu.sena.gestion_libros.apis.abstract_.IApi;
-import co.edu.sena.gestion_libros.controllers.CategoriaJpaController;
-import co.edu.sena.gestion_libros.entities.Categoria;
+import co.edu.sena.gestion_libros.controllers.AutorJpaController;
+import co.edu.sena.gestion_libros.entities.Autor;
 import co.edu.sena.gestion_libros.utils.JsonTransformer;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -11,27 +11,26 @@ import java.util.Hashtable;
 import java.util.List;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.persistence.PersistenceException;
 import spark.Request;
 import spark.Response;
 
-public class ApiCategoria extends BasicApi implements IApi {
+public class ApiAutor extends BasicApi implements IApi {
 
-    private static ApiCategoria instance = null;
+    private static ApiAutor instance = null;
     private Gson gson = null;
-    private String path = "/categoria";
-    private CategoriaJpaController controller;
+    private String path = "/autor";
+    private AutorJpaController controller;
 
-    private ApiCategoria() {
+    private ApiAutor() {
         init();
         gson = JsonTransformer.singleton().getGson();
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPU_LIBROS");
-        controller = new CategoriaJpaController(emf);
+        controller = new AutorJpaController(emf);
     }
 
-    public static ApiCategoria singleton() {
+    public static ApiAutor singleton() {
         if (instance == null) {
-            instance = new ApiCategoria();
+            instance = new ApiAutor();
         }
         return instance;
     }
@@ -47,13 +46,13 @@ public class ApiCategoria extends BasicApi implements IApi {
         String body = rq.body();
         if (!body.trim().equals("")) {
             try {
-                Categoria entity = gson.fromJson(body, Categoria.class);
+                Autor entity = gson.fromJson(body, Autor.class);
                 controller.create(entity);
                 rs.status(201);
                 r.put("status", 201);
                 r.put("message", "Creado con exito!");
                 r.put("data", entity);
-            } catch (JsonSyntaxException | PersistenceException e ) {
+            } catch (JsonSyntaxException e) {
                 rs.status(400);
                 r.put("status", 400);
                 r.put("message", e.getMessage());
@@ -72,10 +71,12 @@ public class ApiCategoria extends BasicApi implements IApi {
         try {
             int id = Integer.parseInt(rq.params("id"));
             String body = rq.body();
-            Categoria newEntity = gson.fromJson(body, Categoria.class);
-            Categoria oldEntity = controller.findCategoria(id);
+            Autor newEntity = gson.fromJson(body, Autor.class);
+            Autor oldEntity = controller.findAutor(id);
             if (oldEntity != null) {
-                oldEntity.setCatNombre(newEntity.getCatNombre());
+                oldEntity.setAutNombre(newEntity.getAutNombre());
+                oldEntity.setAutGenero(newEntity.getAutGenero());
+                oldEntity.setAutFechaNacimiento(newEntity.getAutFechaNacimiento());
                 controller.edit(oldEntity);
                 retorno.put("status", 200);
                 retorno.put("message", "Registro actualizado con exito!");
@@ -112,7 +113,7 @@ public class ApiCategoria extends BasicApi implements IApi {
     @Override
     public Object getAll(Request rq, Response rs) {
         Hashtable<String, Object> r = new Hashtable<>();
-        List<Categoria> categorias = controller.findCategoriaEntities();
+        List<Autor> categorias = controller.findAutorEntities();
         if (categorias.size() > 0) {
             r.put("status", 200);
             r.put("message", "Registros encontrados");
@@ -130,7 +131,7 @@ public class ApiCategoria extends BasicApi implements IApi {
         Hashtable<String, Object> r = new Hashtable<>();
         try {
             int id = Integer.parseInt(rq.params("id"));
-            Categoria entity = controller.findCategoria(id);
+            Autor entity = controller.findAutor(id);
             if (entity != null) {
                 r.put("status", 200);
                 r.put("message", "Registro encontrado!");

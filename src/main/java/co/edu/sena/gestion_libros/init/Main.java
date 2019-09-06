@@ -13,5 +13,6 @@ public class Main {
         //Registro de apis
         ApiCategoria.singleton();
         ApiLibro.singleton();
+        ApiAutor.singleton();
     }
 }
