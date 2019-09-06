@@ -2,8 +2,8 @@ package co.edu.sena.gestion_libros.apis;
 
 import co.edu.sena.gestion_libros.apis.abstract_.BasicApi;
 import co.edu.sena.gestion_libros.apis.abstract_.IApi;
-import co.edu.sena.gestion_libros.controllers.CategoriaJpaController;
-import co.edu.sena.gestion_libros.entities.Categoria;
+import co.edu.sena.gestion_libros.controllers.LibroJpaController;
+import co.edu.sena.gestion_libros.entities.Libro;
 import co.edu.sena.gestion_libros.utils.JsonTransformer;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -14,23 +14,23 @@ import javax.persistence.Persistence;
 import spark.Request;
 import spark.Response;
 
-public class ApiCategoria extends BasicApi implements IApi {
+public class ApiLibro extends BasicApi implements IApi {
 
-    private static ApiCategoria instance = null;
+    private static ApiLibro instance = null;
     private Gson gson = null;
-    private String path = "/categoria";
-    private CategoriaJpaController controller;
+    private String path = "/libro";
+    private LibroJpaController controller;
 
-    private ApiCategoria() {
+    private ApiLibro() {
         init();
         gson = JsonTransformer.singleton().getGson();
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPU_LIBROS");
-        controller = new CategoriaJpaController(emf);
+        controller = new LibroJpaController(emf);
     }
 
-    public static ApiCategoria singleton() {
+    public static ApiLibro singleton() {
         if (instance == null) {
-            instance = new ApiCategoria();
+            instance = new ApiLibro();
         }
         return instance;
     }
@@ -46,7 +46,7 @@ public class ApiCategoria extends BasicApi implements IApi {
         String body = rq.body();
         if (!body.trim().equals("")) {
             try {
-                Categoria entity = gson.fromJson(body, Categoria.class);
+                Libro entity = gson.fromJson(body, Libro.class);
                 controller.create(entity);
                 rs.status(201);
                 r.put("status", 201);
@@ -71,10 +71,13 @@ public class ApiCategoria extends BasicApi implements IApi {
         try {
             int id = Integer.parseInt(rq.params("id"));
             String body = rq.body();
-            Categoria newEntity = gson.fromJson(body, Categoria.class);
-            Categoria oldEntity = controller.findCategoria(id);
+            Libro newEntity = gson.fromJson(body, Libro.class);
+            Libro oldEntity = controller.findLibro(id);
             if (oldEntity != null) {
-                oldEntity.setCatNombre(newEntity.getCatNombre());
+                oldEntity.setLibNombre(newEntity.getLibNombre());
+                oldEntity.setLibNumeroPaginas(newEntity.getLibNumeroPaginas());
+                oldEntity.setLibFechaPublicacion(newEntity.getLibFechaPublicacion());
+                oldEntity.setCatId(newEntity.getCatId());
                 controller.edit(oldEntity);
                 retorno.put("status", 200);
                 retorno.put("message", "Registro actualizado con exito!");
@@ -111,7 +114,7 @@ public class ApiCategoria extends BasicApi implements IApi {
     @Override
     public Object getAll(Request rq, Response rs) {
         Hashtable<String, Object> r = new Hashtable<>();
-        List<Categoria> categorias = controller.findCategoriaEntities();
+        List<Libro> categorias = controller.findLibroEntities();
         if (categorias.size() > 0) {
             r.put("status", 200);
             r.put("message", "Registros encontrados");
@@ -129,7 +132,7 @@ public class ApiCategoria extends BasicApi implements IApi {
         Hashtable<String, Object> r = new Hashtable<>();
         try {
             int id = Integer.parseInt(rq.params("id"));
-            Categoria entity = controller.findCategoria(id);
+            Libro entity = controller.findLibro(id);
             if (entity != null) {
                 r.put("status", 200);
                 r.put("message", "Registro encontrado!");
