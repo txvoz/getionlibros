@@ -22,6 +22,10 @@ function cargarAutores() {
         $('#example').dashboardCodeBsMultiSelect();
     });
 }
+function guardarAutorLibro(target)
+{
+    var id = $(target).data("id");
+}
 $(function () {
     cargarCategorias();
 
